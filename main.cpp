@@ -3,8 +3,8 @@
 #include<algorithm>
 using namespace std;
 const int dimension = 3;
-int lowerBound = 20000;
-int upperBound = -20000;
+int upperBound = 20000;
+int lowerBound = -20000;
 char human;
 char computer;
 enum PlayerTurn
@@ -15,23 +15,20 @@ char board[dimension][dimension];
 
 void generateEmptyBoard()
 {
-    for (int i = 0;i < dimension;i++)
+    for (int i = 0; i < dimension; i++)
     {
-        for(int j = 0;j < dimension;j++)
+        for(int j = 0; j < dimension; j++)
         {
-            board[i][j]=' ';
+            board[i][j] = ' ';
         }
     }
 }
 
-
-
 void printTable()
 {
-    for (int i = 0;i < dimension;i++)
+    for (int i = 0; i < dimension; i++)
     {
-
-        for(int j = 0;j < dimension;j++)
+        for(int j = 0; j < dimension; j++)
         {
             cout << '|' << board[i][j];
         }
@@ -39,50 +36,50 @@ void printTable()
     }
 }
 
-bool checkIfSomeoneWon(char ch)
+bool isCurrentWinner(char ch)
 {
-    for(int i = 0; i < dim; i++) {
-        int n=dim;
+    for(int i = 0; i < dimension; i++)
+    {
+        int n=dimension;
         while(--n>0 && board[i][n]==board[i][0]);
         if(board[i][0] == ch && n==0) return true;
-        n=dim;
-
+        n=dimension;
 
         while(--n>0 && board[n][i]==board[0][i]);
         if(board[0][i] == ch && n==0) return true;
     }
     int br=0;
 
-
-    while(board[br][br]==board[dim-1][dim-1])
+    while(board[br][br]==board[dimension-1][dimension-1])
     {
         br++;
     }
-    if (board[0][0] == ch && br==dim) {
+    if (board[0][0] == ch && br==dimension) {
         return true;
     }
 
 
     br =0;
     int help=0;
-    while(board[help][dim-help-1]==board[0][dim-1])
+    while(board[help][dimension-help-1]==board[0][dimension-1])
     {
         br++;
         help++;
     }
-    if (board[0][dim-1] == ch && br==dim) {
-        return true;}
+    if (board[0][dimension-1] == ch && br==dimension)
+    {
+        return true;
+    }
 
     return false;
-
 }
 
 bool notempty()
 {
     bool flag = true;
-    for (int i=0;i<dim;i++)
+    for (int i=0;i<dimension;i++)
     {
-        for(int j=0;j<dim;j++)
+        for(int j=0;j<dimension;j++)
         {
             if(board[i][j]==' ')
             {
@@ -93,11 +90,11 @@ bool notempty()
     return flag;
 }
 
-int score()
+int currentScore()
 {
-    if(win(computer))
+    if(isCurrentWinner(computer))
         return 1;
-    if(win(human))
+    if(isCurrentWinner(human))
         return -1;
     return 0;
 }
@@ -109,9 +106,9 @@ int score()
     {
         return temp;
     }
-    for (int i=0;i<dim;i++)
+    for (int i=0;i<dimension;i++)
     {
-        for(int j=0;j<dim;j++)
+        for(int j=0;j<dimension;j++)
         {
             if(board[i][j]==' ')
             {pair<int,int> tmp(i,j);
@@ -124,37 +121,39 @@ int score()
 vector<int> minmax(bool who,int alpha,int beta)
 {
     vector<pair<int,int> > allposiblemoves;
-    allposiblemoves=allmoves();
-    int scoree;
-    int first=-1;
-    int second=-1;
-    if(notempty() || win(human) || win(computer))
+    allposiblemoves = allmoves();
+    int score;
+    int first = -1;
+    int second = -1;
+    if(notempty() || isCurrentWinner(human) || isCurrentWinner(computer))
     {
-        scoree=score();
+        score = currentScore();
         vector<int> temp;
-        temp.push_back(scoree);
+        temp.push_back(score);
         temp.push_back(first);
         temp.push_back(second);
-        return temp;    }
+        return temp;
+    }
     else{
-         for(int i=0;i<allposiblemoves.size();i++){
+         for(int i=0;i<allposiblemoves.size();i++)
+         {
              if(who==true)
             {
                  board[allposiblemoves[i].first][allposiblemoves[i].second]=computer;
-                 scoree=minmax(false,alpha,beta)[0];
-                if(scoree>alpha)
+                 score=minmax(false,alpha,beta)[0];
+                if(score>alpha)
                 {
-                    alpha=scoree;
+                    alpha=score;
                     first=allposiblemoves[i].first;
                     second=allposiblemoves[i].second;
                 }
             }
              else{
                  board[allposiblemoves[i].first][allposiblemoves[i].second]=human;
-                 scoree=minmax(true,alpha,beta)[0];
-                 if(scoree<beta)
+                 score=minmax(true,alpha,beta)[0];
+                 if(score<beta)
                 {
-                    beta=scoree;
+                    beta=score;
                     first=allposiblemoves[i].first;
                     second=allposiblemoves[i].second;
                 }
@@ -186,45 +185,43 @@ vector<int> minmax(bool who,int alpha,int beta)
 }
  int main()
 {
-    gen();
+    generateEmptyBoard();
     cout<<"choce x for second and o for first";
     char a;
     cin>>a;
     human=a;
-    if(a=='o')
+    if(a == 'o')
     {
-        computer='x';
-
+        computer = 'x';
     }
     else{
-        computer='o';
+        computer = 'o';
     }
     int i,j;
-    print();
+    printTable();
     cout<<"turns start from 0 and end on dimention-1"<<endl;
-    while(!notempty() && !win(computer) && !win(human) )
+    while(!notempty() && !isCurrentWinner(computer) && !isCurrentWinner(human) )
     {
-         if(human=='o')
+         if(human == 'o')
         {
             cin>>i>>j;
-            board[i][j]='o';
-            print();
-            vector<int>temp=minmax(true,ninf,inf);
-             board[temp[1]][temp[2]]=computer;
-            print();
+            board[i][j] = 'o';
+            printTable();
+            vector<int>temp = minmax(true,lowerBound,upperBound);
+             board[temp[1]][temp[2]] = computer;
+            printTable();
         }
          else{
-            vector<int>temp=minmax(true,ninf,inf);
-             board[temp[1]][temp[2]]=computer;
-            print();
-            if(win(human)||win(computer)||notempty())
+            vector<int>temp = minmax(true,lowerBound,upperBound);
+             board[temp[1]][temp[2]] = computer;
+             printTable();
+            if(isCurrentWinner(human)|| isCurrentWinner(computer)||notempty())
             {
                 break;
             }
             cin>>i>>j;
             board[i][j]='x';
-            print();
-
+             printTable();
         }
     }
 
