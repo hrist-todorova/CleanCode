@@ -39,7 +39,7 @@ void printTable()
     }
 }
 
-bool checkIfSomeoneWon(char ch)
+bool isCurrentWinner(char ch)
 {
     for(int i = 0; i < dim; i++) {
         int counter = dimension;
@@ -78,90 +78,97 @@ bool checkIfSomeoneWon(char ch)
 
 }
 
-bool isBoardEmpty()
+bool isBoardFull()
 {
-    bool isEmpty = true;
-    for (int i=0;i<dim;i++)
+    bool isFull = true;
+    for (int i = 0; i < dimension; i++)
     {
-        for(int j=0;j<dim;j++)
+        for(int j = 0;j < dimension; j++)
         {
-            if(board[i][j]==' ')
+            if(board[i][j] == ' ')
             {
                 return false;
             }
         }
     }
-    return isEmpty;
+    return isFull;
 }
 
 int currentScore()
 {
-    if(win(computer))
+    if(isCurrentWinner(computer))
         return 1;
-    if(win(human))
+    if(isCurrentWinner(human))
         return -1;
     return 0;
 }
 
- vector<pair<int,int> > allmoves()
+vector<pair<int,int> > getAllEmptyMoves()
 {
-    vector<pair<int,int> >temp;
-    if(notempty())
+    vector<pair<int,int>> emptyMoves;
+    if(isBoardFull())
     {
-        return temp;
+        return emptyMoves;
     }
-    for (int i=0;i<dim;i++)
+    for (int i = 0; i < dimension; i++)
     {
-        for(int j=0;j<dim;j++)
+        for(int j = 0; j < dimension; j++)
         {
-            if(board[i][j]==' ')
-            {pair<int,int> tmp(i,j);
-                temp.push_back(tmp);
+            if(board[i][j] == ' ')
+            {
+                pair<int,int> cell(i,j);
+                emptyMoves.push_back(cell);
             }
         }
     }
 }
 
-vector<int> minmax(bool who,int alpha,int beta)
+vector<int> minmaxAlgorithm(PlayerTurn currentPlayer, int alpha, int beta)
 {
-    vector<pair<int,int> > allposiblemoves;
-    allposiblemoves=allmoves();
-    int scoree;
+    vector<pair<int,int> > allPosibleMoves;
+    allPosibleMoves = getAllEmptyMoves();
+    int currentScore;
     int first=-1;
     int second=-1;
+
     if(notempty() || win(human) || win(computer))
     {
-        scoree=score();
+        currentScore = currentScore();
         vector<int> temp;
-        temp.push_back(scoree);
+        temp.push_back(currentScore);
         temp.push_back(first);
         temp.push_back(second);
-        return temp;    }
-    else{
-         for(int i=0;i<allposiblemoves.size();i++){
-             if(who==true)
+        return temp;
+    }
+    else {
+         for(int i = 0;i < allPosibleMoves.size();i++)
+         {
+             if(currentPlayer == PlayerTurn.AI)
             {
-                 board[allposiblemoves[i].first][allposiblemoves[i].second]=computer;
-                 scoree=minmax(false,alpha,beta)[0];
-                if(scoree>alpha)
+                 board[allPosibleMoves[i].first][allPosibleMoves[i].second] = computer;
+                 currentScore = minmaxAlgorithm(PlayerTurn.USER, alpha, beta)[0];
+                if(currentScore > alpha)
                 {
-                    alpha=scoree;
-                    first=allposiblemoves[i].first;
-                    second=allposiblemoves[i].second;
+                    alpha = currentScore;
+                    first = allPosibleMoves[i].first;
+                    second = allPosibleMoves[i].second;
                 }
             }
-             else{
-                 board[allposiblemoves[i].first][allposiblemoves[i].second]=human;
-                 scoree=minmax(true,alpha,beta)[0];
-                 if(scoree<beta)
+             else
+             {
+                 board[allPosibleMoves[i].first][allPosibleMoves[i].second] = human;
+                 currentScore = minmax(true,alpha,beta)[0];
+                 if(currentScore < beta)
                 {
-                    beta=scoree;
-                    first=allposiblemoves[i].first;
-                    second=allposiblemoves[i].second;
+                    beta = currentScore;
+                    first = allPosibleMoves[i].first;
+                    second = allPosibleMoves[i].second;
                 }
             }
-             board[allposiblemoves[i].first][allposiblemoves[i].second]=' ';
-             if (alpha >= beta) break;}
+
+            board[allPosibleMoves[i].first][allPosibleMoves[i].second] = ' ';
+            if (alpha >= beta) break;
+        }
         if(who==true)
         {
             vector<int> temp;
