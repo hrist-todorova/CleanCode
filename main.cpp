@@ -128,11 +128,11 @@ vector<int> minmax(PlayerTurn currentPlayer, int alpha, int beta)
     if(notempty() || isCurrentWinner(human) || isCurrentWinner(computer))
     {
         score = currentScore();
-        vector<int> temp;
-        temp.push_back(score);
-        temp.push_back(first);
-        temp.push_back(second);
-        return temp;
+        vector<int> result;
+        result.push_back(score);
+        result.push_back(first);
+        result.push_back(second);
+        return result;
     }
     else{
          for(int i=0;i<allposiblemoves.size();i++)
@@ -163,20 +163,20 @@ vector<int> minmax(PlayerTurn currentPlayer, int alpha, int beta)
         }
         if(currentPlayer == AI)
         {
-            vector<int> temp;
-            temp.push_back(alpha);
-            temp.push_back(first);
-            temp.push_back(second);
-            return temp;
+            vector<int> result;
+            result.push_back(alpha);
+            result.push_back(first);
+            result.push_back(second);
+            return result;
 
 
         }
         else{
-            vector<int> temp;
-            temp.push_back(beta);
-            temp.push_back(first);
-            temp.push_back(second);
-            return temp;
+            vector<int> result;
+            result.push_back(beta);
+            result.push_back(first);
+            result.push_back(second);
+            return result;
 
 
 
