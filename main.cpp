@@ -2,9 +2,9 @@
 #include<vector>
 #include<algorithm>
 using namespace std;
-const int dim=3;
-int inf=20000;
-int ninf=-20000;
+const int dimension = 3;
+int lowerBound = 20000;
+int upperBound = -20000;
 char human;
 char computer;
 bool AIturn=true;
