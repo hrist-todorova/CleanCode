@@ -41,8 +41,9 @@ void printTable()
 
 bool isCurrentWinner(char ch)
 {
-    for(int i = 0; i < dim; i++) {
-        int counter = dimension;
+    int counter;
+    for(int i = 0; i < dimension; i++) {
+        counter = dimension;
         while(--counter > 0 && board[i][counter] == board[i][0]);
         if(board[i][0] == ch && counter == 0) return true;
         counter = dimension;
@@ -105,7 +106,7 @@ int currentScore()
 
 vector<pair<int,int> > getAllEmptyMoves()
 {
-    vector<pair<int,int>> emptyMoves;
+    vector<pair<int,int> > emptyMoves;
     if(isBoardFull())
     {
         return emptyMoves;
@@ -127,15 +128,15 @@ vector<int> minmaxAlgorithm(PlayerTurn currentPlayer, int alpha, int beta)
 {
     vector<pair<int,int> > allPosibleMoves;
     allPosibleMoves = getAllEmptyMoves();
-    int currentScore;
+    int score;
     int first=-1;
     int second=-1;
 
-    if(notempty() || win(human) || win(computer))
+    if(isBoardFull() || isCurrentWinner(human) || isCurrentWinner(computer))
     {
-        currentScore = currentScore();
+        score = currentScore();
         vector<int> temp;
-        temp.push_back(currentScore);
+        temp.push_back(score);
         temp.push_back(first);
         temp.push_back(second);
         return temp;
@@ -143,13 +144,13 @@ vector<int> minmaxAlgorithm(PlayerTurn currentPlayer, int alpha, int beta)
     else {
          for(int i = 0;i < allPosibleMoves.size();i++)
          {
-             if(currentPlayer == PlayerTurn.AI)
+             if(currentPlayer == AI)
             {
                  board[allPosibleMoves[i].first][allPosibleMoves[i].second] = computer;
-                 currentScore = minmaxAlgorithm(PlayerTurn.USER, alpha, beta)[0];
-                if(currentScore > alpha)
+                 score = minmaxAlgorithm(USER, alpha, beta)[0];
+                if(score > alpha)
                 {
-                    alpha = currentScore;
+                    alpha = score;
                     first = allPosibleMoves[i].first;
                     second = allPosibleMoves[i].second;
                 }
@@ -157,10 +158,10 @@ vector<int> minmaxAlgorithm(PlayerTurn currentPlayer, int alpha, int beta)
              else
              {
                  board[allPosibleMoves[i].first][allPosibleMoves[i].second] = human;
-                 currentScore = minmax(true,alpha,beta)[0];
-                 if(currentScore < beta)
+                 score = minmaxAlgorithm(AI,alpha,beta)[0];
+                 if(score < beta)
                 {
-                    beta = currentScore;
+                    beta = score;
                     first = allPosibleMoves[i].first;
                     second = allPosibleMoves[i].second;
                 }
@@ -169,71 +170,69 @@ vector<int> minmaxAlgorithm(PlayerTurn currentPlayer, int alpha, int beta)
             board[allPosibleMoves[i].first][allPosibleMoves[i].second] = ' ';
             if (alpha >= beta) break;
         }
-        if(who==true)
+        if(currentPlayer == AI)
         {
-            vector<int> temp;
-            temp.push_back(alpha);
-            temp.push_back(first);
-            temp.push_back(second);
-            return temp;
+            vector<int> result;
+            result.push_back(alpha);
+            result.push_back(first);
+            result.push_back(second);
+            return result;
 
 
         }
-        else{
-            vector<int> temp;
-            temp.push_back(beta);
-            temp.push_back(first);
-            temp.push_back(second);
-            return temp;
-
-
-
+        else
+        {
+            vector<int> result;
+            result.push_back(beta);
+            result.push_back(first);
+            result.push_back(second);
+            return result;
         }
     }
 
 }
  int main()
 {
-    gen();
-    cout<<"choce x for second and o for first";
+    generateEmptyBoard();
+    cout << "choce x for second and o for first";
     char a;
-    cin>>a;
-    human=a;
-    if(a=='o')
+    cin >> a;
+    human = a;
+    if(a == 'o')
     {
-        computer='x';
-
+        computer = 'x';
     }
-    else{
+    else
+    {
         computer='o';
     }
-    int i,j;
-    print();
-    cout<<"turns start from 0 and end on dimention-1"<<endl;
-    while(!notempty() && !win(computer) && !win(human) )
+    int i, j;
+    printTable();
+    cout << "turns start from 0 and end on dimention - 1" << endl;
+    while(!isBoardFull() && !isCurrentWinner(computer) && !isCurrentWinner(human))
     {
-         if(human=='o')
+         if(human == 'o')
         {
-            cin>>i>>j;
-            board[i][j]='o';
-            print();
-            vector<int>temp=minmax(true,ninf,inf);
-             board[temp[1]][temp[2]]=computer;
-            print();
+            cin>> i>> j;
+            board[i][j] = 'o';
+            printTable();
+            vector<int> result = minmaxAlgorithm(AI, upperBound, lowerBound);
+            board[result[1]][result[2]] = computer;
+            printTable();
         }
-         else{
-            vector<int>temp=minmax(true,ninf,inf);
-             board[temp[1]][temp[2]]=computer;
-            print();
-            if(win(human)||win(computer)||notempty())
+         else
+         {
+            vector<int> result = minmaxAlgorithm(USER, upperBound, lowerBound);
+            board[result[1]][result[2]] = computer;
+            printTable();
+            if(isCurrentWinner(human)|| isCurrentWinner(computer) || isBoardFull())
             {
                 break;
             }
-            cin>>i>>j;
-            board[i][j]='x';
-            print();
-
-        }
+            cin >> i >> j;
+            board[i][j] = 'x';
+            printTable();
+         }
     }
 
     return 0;
