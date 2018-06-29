@@ -15,23 +15,20 @@ char board[dimension][dimension];
 
 void generateEmptyBoard()
 {
-    for (int i = 0;i < dimension;i++)
+    for (int i = 0; i < dimension; i++)
     {
-        for(int j = 0;j < dimension;j++)
+        for(int j = 0; j < dimension; j++)
         {
-            board[i][j]=' ';
+            board[i][j] = ' ';
         }
     }
 }
 
-
-
 void printTable()
 {
-    for (int i = 0;i < dimension;i++)
+    for (int i = 0; i < dimension; i++)
     {
-
-        for(int j = 0;j < dimension;j++)
+        for(int j = 0; j < dimension; j++)
         {
             cout << '|' << board[i][j];
         }
@@ -41,18 +38,17 @@ void printTable()
 
 bool checkIfSomeoneWon(char ch)
 {
-    for(int i = 0; i < dim; i++) {
+    for(int i = 0; i < dim; i++)
+    {
         int n=dim;
         while(--n>0 && board[i][n]==board[i][0]);
         if(board[i][0] == ch && n==0) return true;
         n=dim;
 
-
         while(--n>0 && board[n][i]==board[0][i]);
         if(board[0][i] == ch && n==0) return true;
     }
     int br=0;
-
 
     while(board[br][br]==board[dim-1][dim-1])
     {
@@ -70,11 +66,12 @@ bool checkIfSomeoneWon(char ch)
         br++;
         help++;
     }
-    if (board[0][dim-1] == ch && br==dim) {
-        return true;}
+    if (board[0][dim-1] == ch && br==dim)
+    {
+        return true;
+    }
 
     return false;
-
 }
 
 bool notempty()
@@ -124,10 +121,10 @@ int score()
 vector<int> minmax(bool who,int alpha,int beta)
 {
     vector<pair<int,int> > allposiblemoves;
-    allposiblemoves=allmoves();
+    allposiblemoves = allmoves();
     int scoree;
-    int first=-1;
-    int second=-1;
+    int first = -1;
+    int second = -1;
     if(notempty() || win(human) || win(computer))
     {
         scoree=score();
@@ -135,9 +132,11 @@ vector<int> minmax(bool who,int alpha,int beta)
         temp.push_back(scoree);
         temp.push_back(first);
         temp.push_back(second);
-        return temp;    }
+        return temp;
+    }
     else{
-         for(int i=0;i<allposiblemoves.size();i++){
+         for(int i=0;i<allposiblemoves.size();i++)
+         {
              if(who==true)
             {
                  board[allposiblemoves[i].first][allposiblemoves[i].second]=computer;
@@ -191,31 +190,30 @@ vector<int> minmax(bool who,int alpha,int beta)
     char a;
     cin>>a;
     human=a;
-    if(a=='o')
+    if(a == 'o')
     {
-        computer='x';
-
+        computer = 'x';
     }
     else{
-        computer='o';
+        computer = 'o';
     }
     int i,j;
     print();
     cout<<"turns start from 0 and end on dimention-1"<<endl;
     while(!notempty() && !win(computer) && !win(human) )
     {
-         if(human=='o')
+         if(human == 'o')
         {
             cin>>i>>j;
-            board[i][j]='o';
+            board[i][j] = 'o';
             print();
-            vector<int>temp=minmax(true,ninf,inf);
-             board[temp[1]][temp[2]]=computer;
+            vector<int>temp = minmax(true,ninf,inf);
+             board[temp[1]][temp[2]] = computer;
             print();
         }
          else{
-            vector<int>temp=minmax(true,ninf,inf);
-             board[temp[1]][temp[2]]=computer;
+            vector<int>temp = minmax(true,ninf,inf);
+             board[temp[1]][temp[2]] = computer;
             print();
             if(win(human)||win(computer)||notempty())
             {
@@ -224,7 +222,6 @@ vector<int> minmax(bool who,int alpha,int beta)
             cin>>i>>j;
             board[i][j]='x';
             print();
-
         }
     }
 
