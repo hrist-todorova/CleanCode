@@ -28,10 +28,10 @@ void generateEmptyBoard()
 
 void printTable()
 {
-    for (int i = 0;i < dimension;i++)
+    for (int i = 0; i < dimension;i++)
     {
 
-        for(int j = 0;j < dimension;j++)
+        for(int j = 0; j < dimension;j++)
         {
             cout << '|' << board[i][j];
         }
@@ -42,44 +42,45 @@ void printTable()
 bool checkIfSomeoneWon(char ch)
 {
     for(int i = 0; i < dim; i++) {
-        int n=dim;
-        while(--n>0 && board[i][n]==board[i][0]);
-        if(board[i][0] == ch && n==0) return true;
-        n=dim;
+        int counter = dimension;
+        while(--counter > 0 && board[i][counter] == board[i][0]);
+        if(board[i][0] == ch && counter == 0) return true;
+        counter = dimension;
 
 
-        while(--n>0 && board[n][i]==board[0][i]);
-        if(board[0][i] == ch && n==0) return true;
+        while(--counter > 0 && board[counter][i] == board[0][i]);
+        if(board[0][i] == ch && counter == 0) return true;
     }
-    int br=0;
+    counter = 0;
 
 
-    while(board[br][br]==board[dim-1][dim-1])
+    while(board[counter][counter] == board[dimension - 1][dimension - 1])
     {
-        br++;
+        counter++;
     }
-    if (board[0][0] == ch && br==dim) {
+    if (board[0][0] == ch && counter == dimension) {
         return true;
     }
 
-
-    br =0;
-    int help=0;
-    while(board[help][dim-help-1]==board[0][dim-1])
+    counter = 0;
+    int secondaryCounter = 0;
+    while(board[secondaryCounter][dimension - secondaryCounter - 1] == board[0][dimension - 1])
     {
-        br++;
-        help++;
+        counter++;
+        secondaryCounter++;
     }
-    if (board[0][dim-1] == ch && br==dim) {
-        return true;}
+    if (board[0][dimension - 1] == ch && counter == dimension)
+    {
+        return true;
+    }
 
     return false;
 
 }
 
-bool notempty()
+bool isBoardEmpty()
 {
-    bool flag = true;
+    bool isEmpty = true;
     for (int i=0;i<dim;i++)
     {
         for(int j=0;j<dim;j++)
@@ -90,10 +91,10 @@ bool notempty()
             }
         }
     }
-    return flag;
+    return isEmpty;
 }
 
-int score()
+int currentScore()
 {
     if(win(computer))
         return 1;
