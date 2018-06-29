@@ -1,10 +1,12 @@
 #include<iostream>
 #include<vector>
 #include<algorithm>
+
 using namespace std;
 const int dimension = 3;
 int lowerBound = 20000;
 int upperBound = -20000;
+int counter;
 char human;
 char computer;
 enum PlayerTurn
@@ -24,8 +26,6 @@ void generateEmptyBoard()
     }
 }
 
-
-
 void printTable()
 {
     for (int i = 0; i < dimension;i++)
@@ -39,10 +39,18 @@ void printTable()
     }
 }
 
+bool isWinningColumn(char ch)
+{
+    counter = dimension;
+    while(--counter > 0 && board[i][counter] == board[i][0]);
+    bool isWinning = board[i][0] == ch && counter == 0;
+}
+
+
 bool isCurrentWinner(char ch)
 {
-    int counter;
-    for(int i = 0; i < dimension; i++) {
+    for(int i = 0; i < dimension; i++)
+    {
         counter = dimension;
         while(--counter > 0 && board[i][counter] == board[i][0]);
         if(board[i][0] == ch && counter == 0) return true;
@@ -76,7 +84,6 @@ bool isCurrentWinner(char ch)
     }
 
     return false;
-
 }
 
 bool isBoardFull()
@@ -191,6 +198,7 @@ vector<int> minmaxAlgorithm(PlayerTurn currentPlayer, int alpha, int beta)
     }
 
 }
+
  int main()
 {
     generateEmptyBoard();
@@ -211,7 +219,7 @@ vector<int> minmaxAlgorithm(PlayerTurn currentPlayer, int alpha, int beta)
     cout << "turns start from 0 and end on dimention - 1" << endl;
     while(!isBoardFull() && !isCurrentWinner(computer) && !isCurrentWinner(human))
     {
-         if(human == 'o')
+        if(human == 'o')
         {
             cin>> i>> j;
             board[i][j] = 'o';
@@ -220,8 +228,8 @@ vector<int> minmaxAlgorithm(PlayerTurn currentPlayer, int alpha, int beta)
             board[result[1]][result[2]] = computer;
             printTable();
         }
-         else
-         {
+        else
+        {
             vector<int> result = minmaxAlgorithm(USER, upperBound, lowerBound);
             board[result[1]][result[2]] = computer;
             printTable();
@@ -232,8 +240,7 @@ vector<int> minmaxAlgorithm(PlayerTurn currentPlayer, int alpha, int beta)
             cin >> i >> j;
             board[i][j] = 'x';
             printTable();
-         }
+        }
     }
-
     return 0;
 }
