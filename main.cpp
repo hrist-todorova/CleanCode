@@ -3,8 +3,8 @@
 #include<algorithm>
 using namespace std;
 const int dimension = 3;
-int lowerBound = 20000;
-int upperBound = -20000;
+int upperBound = 20000;
+int lowerBound = -20000;
 char human;
 char computer;
 enum PlayerTurn
@@ -207,12 +207,12 @@ vector<int> minmax(bool who,int alpha,int beta)
             cin>>i>>j;
             board[i][j] = 'o';
             print();
-            vector<int>temp = minmax(true,ninf,inf);
+            vector<int>temp = minmax(true,lowerBound,upperBound);
              board[temp[1]][temp[2]] = computer;
             print();
         }
          else{
-            vector<int>temp = minmax(true,ninf,inf);
+            vector<int>temp = minmax(true,lowerBound,upperBound);
              board[temp[1]][temp[2]] = computer;
             print();
             if(win(human)||win(computer)||notempty())
