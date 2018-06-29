@@ -38,35 +38,35 @@ void printTable()
 
 bool checkIfSomeoneWon(char ch)
 {
-    for(int i = 0; i < dim; i++)
+    for(int i = 0; i < dimension; i++)
     {
-        int n=dim;
+        int n=dimension;
         while(--n>0 && board[i][n]==board[i][0]);
         if(board[i][0] == ch && n==0) return true;
-        n=dim;
+        n=dimension;
 
         while(--n>0 && board[n][i]==board[0][i]);
         if(board[0][i] == ch && n==0) return true;
     }
     int br=0;
 
-    while(board[br][br]==board[dim-1][dim-1])
+    while(board[br][br]==board[dimension-1][dimension-1])
     {
         br++;
     }
-    if (board[0][0] == ch && br==dim) {
+    if (board[0][0] == ch && br==dimension) {
         return true;
     }
 
 
     br =0;
     int help=0;
-    while(board[help][dim-help-1]==board[0][dim-1])
+    while(board[help][dimension-help-1]==board[0][dimension-1])
     {
         br++;
         help++;
     }
-    if (board[0][dim-1] == ch && br==dim)
+    if (board[0][dimension-1] == ch && br==dimension)
     {
         return true;
     }
@@ -77,9 +77,9 @@ bool checkIfSomeoneWon(char ch)
 bool notempty()
 {
     bool flag = true;
-    for (int i=0;i<dim;i++)
+    for (int i=0;i<dimension;i++)
     {
-        for(int j=0;j<dim;j++)
+        for(int j=0;j<dimension;j++)
         {
             if(board[i][j]==' ')
             {
@@ -106,9 +106,9 @@ int score()
     {
         return temp;
     }
-    for (int i=0;i<dim;i++)
+    for (int i=0;i<dimension;i++)
     {
-        for(int j=0;j<dim;j++)
+        for(int j=0;j<dimension;j++)
         {
             if(board[i][j]==' ')
             {pair<int,int> tmp(i,j);
