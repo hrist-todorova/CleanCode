@@ -40,33 +40,33 @@ bool isCurrentWinner(char ch)
 {
     for(int i = 0; i < dimension; i++)
     {
-        int n=dimension;
-        while(--n>0 && board[i][n]==board[i][0]);
-        if(board[i][0] == ch && n==0) return true;
-        n=dimension;
+        int counter = dimension;
+        while(--counter > 0 && board[i][counter]==board[i][0]);
+        if(board[i][0] == ch && counter == 0) return true;
+        counter = dimension;
 
-        while(--n>0 && board[n][i]==board[0][i]);
-        if(board[0][i] == ch && n==0) return true;
+        while(--counter>0 && board[counter][i]==board[0][i]);
+        if(board[0][i] == ch && counter==0) return true;
     }
-    int br=0;
+    int secondCounter = 0;
 
-    while(board[br][br]==board[dimension-1][dimension-1])
+    while(board[secondCounter][secondCounter]==board[dimension-1][dimension-1])
     {
-        br++;
+        secondCounter++;
     }
-    if (board[0][0] == ch && br==dimension) {
+    if (board[0][0] == ch && secondCounter == dimension) {
         return true;
     }
 
 
-    br =0;
-    int help=0;
+    secondCounter = 0;
+    int help = 0;
     while(board[help][dimension-help-1]==board[0][dimension-1])
     {
-        br++;
+        secondCounter++;
         help++;
     }
-    if (board[0][dimension-1] == ch && br==dimension)
+    if (board[0][dimension-1] == ch && secondCounter == dimension)
     {
         return true;
     }
@@ -77,9 +77,9 @@ bool isCurrentWinner(char ch)
 bool notempty()
 {
     bool flag = true;
-    for (int i=0;i<dimension;i++)
+    for (int i=0;i < dimension;i++)
     {
-        for(int j=0;j<dimension;j++)
+        for(int j=0;j < dimension;j++)
         {
             if(board[i][j]==' ')
             {
@@ -106,9 +106,9 @@ int currentScore()
     {
         return temp;
     }
-    for (int i=0;i<dimension;i++)
+    for (int i=0;i < dimension;i++)
     {
-        for(int j=0;j<dimension;j++)
+        for(int j=0;j < dimension;j++)
         {
             if(board[i][j]==' ')
             {pair<int,int> tmp(i,j);
@@ -118,7 +118,7 @@ int currentScore()
     }
 }
 
-vector<int> minmax(bool who,int alpha,int beta)
+vector<int> minmax(PlayerTurn currentPlayer, int alpha, int beta)
 {
     vector<pair<int,int> > allposiblemoves;
     allposiblemoves = allmoves();
@@ -137,30 +137,31 @@ vector<int> minmax(bool who,int alpha,int beta)
     else{
          for(int i=0;i<allposiblemoves.size();i++)
          {
-             if(who==true)
+             if(currentPlayer == AI)
             {
                  board[allposiblemoves[i].first][allposiblemoves[i].second]=computer;
-                 score=minmax(false,alpha,beta)[0];
+                 score=minmax(USER,alpha,beta)[0];
                 if(score>alpha)
                 {
-                    alpha=score;
-                    first=allposiblemoves[i].first;
-                    second=allposiblemoves[i].second;
+                    alpha = score;
+                    first = allposiblemoves[i].first;
+                    second = allposiblemoves[i].second;
                 }
             }
              else{
-                 board[allposiblemoves[i].first][allposiblemoves[i].second]=human;
-                 score=minmax(true,alpha,beta)[0];
+                 board[allposiblemoves[i].first][allposiblemoves[i].second] = human;
+                 score = minmax(AI,alpha,beta)[0];
                  if(score<beta)
                 {
-                    beta=score;
-                    first=allposiblemoves[i].first;
-                    second=allposiblemoves[i].second;
+                    beta = score;
+                    first = allposiblemoves[i].first;
+                    second = allposiblemoves[i].second;
                 }
             }
              board[allposiblemoves[i].first][allposiblemoves[i].second]=' ';
-             if (alpha >= beta) break;}
-        if(who==true)
+             if (alpha >= beta) break;
+        }
+        if(currentPlayer == AI)
         {
             vector<int> temp;
             temp.push_back(alpha);
@@ -207,12 +208,12 @@ vector<int> minmax(bool who,int alpha,int beta)
             cin>>i>>j;
             board[i][j] = 'o';
             printTable();
-            vector<int>temp = minmax(true,lowerBound,upperBound);
-             board[temp[1]][temp[2]] = computer;
+            vector<int>temp = minmax(AI,lowerBound,upperBound);
+            board[temp[1]][temp[2]] = computer;
             printTable();
         }
          else{
-            vector<int>temp = minmax(true,lowerBound,upperBound);
+            vector<int>temp = minmax(USER,lowerBound,upperBound);
              board[temp[1]][temp[2]] = computer;
              printTable();
             if(isCurrentWinner(human)|| isCurrentWinner(computer)||notempty())
