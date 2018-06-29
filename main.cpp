@@ -26,12 +26,23 @@ void generateEmptyBoard()
     }
 }
 
+<<<<<<< HEAD
 void printTable()
 {
     for (int i = 0; i < dimension;i++)
     {
 
         for(int j = 0; j < dimension;j++)
+=======
+
+
+void printTable()
+{
+    for (int i = 0;i < dimension;i++)
+    {
+
+        for(int j = 0;j < dimension;j++)
+>>>>>>> 3def300... changed first two methods names and made formatting
         {
             cout << '|' << board[i][j];
         }
@@ -39,6 +50,7 @@ void printTable()
     }
 }
 
+<<<<<<< HEAD
 bool isWinningColumn(char ch)
 {
     counter = dimension;
@@ -48,6 +60,9 @@ bool isWinningColumn(char ch)
 
 
 bool isCurrentWinner(char ch)
+=======
+bool checkIfSomeoneWon(char ch)
+>>>>>>> 3def300... changed first two methods names and made formatting
 {
     for(int i = 0; i < dimension; i++)
     {
