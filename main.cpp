@@ -2,19 +2,22 @@
 #include<vector>
 #include<algorithm>
 using namespace std;
-const int dim=3;
-int inf=20000;
-int ninf=-20000;
+const int dimension = 3;
+int lowerBound = 20000;
+int upperBound = -20000;
 char human;
 char computer;
-bool AIturn=true;
-char  board[dim][dim];
-
-void gen()
+enum PlayerTurn
 {
-    for (int i=0;i<dim;i++)
+    AI, USER
+};
+char board[dimension][dimension];
+
+void generateEmptyBoard()
+{
+    for (int i = 0;i < dimension;i++)
     {
-        for(int j=0;j<dim;j++)
+        for(int j = 0;j < dimension;j++)
         {
             board[i][j]=' ';
         }
@@ -23,20 +26,20 @@ void gen()
 
 
 
-void print()
+void printTable()
 {
-    for (int i=0;i<dim;i++)
+    for (int i = 0;i < dimension;i++)
     {
 
-        for(int j=0;j<dim;j++)
+        for(int j = 0;j < dimension;j++)
         {
-            cout<<'|'<<board[i][j];
+            cout << '|' << board[i][j];
         }
-        cout<<'|'<<endl;
+        cout << '|' << endl;
     }
 }
 
-bool win(char ch)
+bool checkIfSomeoneWon(char ch)
 {
     for(int i = 0; i < dim; i++) {
         int n=dim;
